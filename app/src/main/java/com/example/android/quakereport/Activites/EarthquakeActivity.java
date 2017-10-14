@@ -19,7 +19,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 import com.example.android.quakereport.Earthquake;
-import com.example.android.quakereport.EarthquakeBuilder;
+import com.example.android.quakereport.EarthquakeUtils;
 import com.example.android.quakereport.EarthquakeListAdapter;
 import com.example.android.quakereport.R;
 
@@ -39,14 +39,8 @@ public class EarthquakeActivity extends AppCompatActivity {
             "{\"type\":\"Feature\",\"properties\":{\"mag\":6,\"place\":\"Pacific-Antarctic Ridge\",\"time\":1451986454620,\"updated\":1459202978040,\"tz\":-540,\"url\":\"http://earthquake.usgs.gov/earthquakes/eventpage/us10004bgk\",\"detail\":\"http://earthquake.usgs.gov/fdsnws/event/1/query?eventid=us10004bgk&format=geojson\",\"felt\":0,\"cdi\":1,\"mmi\":0,\"alert\":\"green\",\"status\":\"reviewed\",\"tsunami\":0,\"sig\":554,\"net\":\"us\",\"code\":\"10004bgk\",\"ids\":\",us10004bgk,gcmt20160105093415,\",\"sources\":\",us,gcmt,\",\"types\":\",cap,dyfi,geoserve,losspager,moment-tensor,nearby-cities,origin,phase-data,shakemap,\",\"nst\":null,\"dmin\":30.75,\"rms\":0.67,\"gap\":71,\"magType\":\"mww\",\"type\":\"earthquake\",\"title\":\"M 6.0 - Pacific-Antarctic Ridge\"},\"geometry\":{\"type\":\"Point\",\"coordinates\":[-136.2603,-54.2906,10]},\"id\":\"us10004bgk\"}],\"bbox\":[-153.4051,-54.2906,10,158.5463,59.6363,582.56]}";
 
     public EarthquakeActivity() {
-        // Create a fake list of earthquake locations.
-//        earthquakes.add(new Earthquake((float) 2, "Cairo", "september, 22, 2020"));
-//        earthquakes.add(new Earthquake((float) 3.6, "San Francisco", "september, 22, 2020"));
-//        earthquakes.add(new Earthquake((float) 5.8, "New York", "september, 22, 2020"));
-//        earthquakes.add(new Earthquake((float) 2.2, "London", "september, 22, 2020"));
-//        earthquakes.add(new Earthquake((float) 0.0, "Tokyo", "september, 22, 2020"));
-//        earthquakes.add(new Earthquake((float) 1.4, "Moscow", "september, 22, 2020"));
-        earthquakes = EarthquakeBuilder.parseEarthQuakes(SAMPLE_JSON_RESPONSE);
+//        earthquakes = EarthquakeUtils.parseJSON(EarthquakeUtils.getJSON("https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2014-01-01&endtime=2014-01-02", this));
+        earthquakes = EarthquakeUtils.parseJSON(SAMPLE_JSON_RESPONSE);
     }
 
     @Override

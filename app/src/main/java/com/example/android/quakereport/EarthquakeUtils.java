@@ -1,5 +1,6 @@
 package com.example.android.quakereport;
 
+import android.content.Context;
 import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,8 +11,34 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class EarthquakeBuilder {
-    public static ArrayList<Earthquake> parseEarthQuakes(final String json) {
+public class EarthquakeUtils {
+    public static String getJSON(final String url, Context context) {
+        // TODO
+//        RequestQueue queue = Volley.newRequestQueue(context);
+//        String result;
+//
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        result = response;
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Log.e(EarthquakeUtils.class.getName(), "couldn't get response from url"+url);
+//                    }
+//                }
+//        );
+//
+//        queue.add(stringRequest);
+//
+//        return result;
+        return "";
+    }
+
+    public static ArrayList<Earthquake> parseJSON(final String json) {
         ArrayList<Earthquake> earthquakes = new ArrayList<>();
         try {
             JSONObject jsonObject = new JSONObject(json);
@@ -31,7 +58,7 @@ public class EarthquakeBuilder {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.e(EarthquakeBuilder.class.getName(), "couldn't parse");
+            Log.e(EarthquakeUtils.class.getName(), "couldn't parse");
         }
         return earthquakes;
     }
