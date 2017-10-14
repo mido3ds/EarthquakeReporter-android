@@ -3,16 +3,18 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="65dp"
-              android:padding="16dp"
+              android:padding="15dp"
 
               tools:background="#a6a6ec"><!--for mocking-->
 
     <TextView
             android:id="@+id/magnitude_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:textSize="16sp"
             android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/circle_magnitude"
 
             tools:text="0.0"/>
 

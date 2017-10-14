@@ -24,8 +24,9 @@ public class EarthquakeBuilder {
                 Double mag = properties.getDouble("mag");
                 String place = properties.getString("place");
                 Long epochTime = properties.getLong("time");
+                String url = properties.getString("url");
 
-                earthquakes.add(new Earthquake(mag, place, formatDate(epochTime)));
+                earthquakes.add(new Earthquake(mag, place, formatDate(epochTime), url));
             }
 
         } catch (JSONException e) {
