@@ -6,36 +6,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class EarthquakeUtils {
-    public static String getJSON(final String url, Context context) {
+    public static String getJSON(final String urlString) {
         // TODO
-//        RequestQueue queue = Volley.newRequestQueue(context);
-//        String result;
-//
-//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        result = response;
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Log.e(EarthquakeUtils.class.getName(), "couldn't get response from url"+url);
-//                    }
-//                }
-//        );
-//
-//        queue.add(stringRequest);
-//
-//        return result;
-        return "";
+        URL url = new URL(urlString);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        String result = "";
+
+        try {
+            InputStream inputStream = new BufferedInputStream(connection.getInputStream());
+            readStream(inputStream);
+            result = streamToString(inputStream);
+        } catch (Exception e) {
+            Log.e(EarthquakeUtils.class.getName(), "couldn't get response");
+            e.printStackTrace();
+        } finally {
+            connection.disconnect();
+        }
+
+        return result;
     }
 
     public static ArrayList<Earthquake> parseJSON(final String json) {
@@ -67,5 +65,12 @@ public class EarthquakeUtils {
         Date date = new Date(epochSeconds);
         DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         return dateFormat.format(date);
+    }
+
+    private static String streamToString(final InputStream inputStream) {
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(inputStream, writer, "UTF-8");
+
+        return writer.toString();
     }
 }
