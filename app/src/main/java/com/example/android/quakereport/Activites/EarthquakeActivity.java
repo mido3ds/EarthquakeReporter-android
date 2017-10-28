@@ -20,6 +20,7 @@ import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
+import android.widget.TextView;
 import com.example.android.quakereport.Earthquake;
 import com.example.android.quakereport.EarthquakeListAdapter;
 import com.example.android.quakereport.EarthquakeLoader;
@@ -41,6 +42,14 @@ public class EarthquakeActivity extends AppCompatActivity
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
         earthquakeListView = (ListView) findViewById(R.id.list);
+
+        setListEmptyView();
+    }
+
+    private void setListEmptyView() {
+        TextView emptyView = (TextView) findViewById(R.id.empty_view);
+        emptyView.setText("No Earthquake Data Found");
+        earthquakeListView.setEmptyView(emptyView);
     }
 
     @Override
@@ -59,4 +68,5 @@ public class EarthquakeActivity extends AppCompatActivity
     public void onLoaderReset(Loader<ArrayList<Earthquake>> loader) {
         earthquakeListView.setAdapter(new EarthquakeListAdapter(this, new ArrayList<Earthquake>()));
     }
+
 }
