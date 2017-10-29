@@ -19,7 +19,9 @@ import android.app.LoaderManager;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.example.android.quakereport.Earthquake;
 import com.example.android.quakereport.EarthquakeListAdapter;
@@ -34,6 +36,7 @@ public class EarthquakeActivity extends AppCompatActivity
     private final int LOADER_ID = 1;
 
     private ListView earthquakeListView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +45,7 @@ public class EarthquakeActivity extends AppCompatActivity
 
         getLoaderManager().initLoader(LOADER_ID, null, this);
         earthquakeListView = (ListView) findViewById(R.id.list);
-
-        setListEmptyView();
+        progressBar = (ProgressBar) findViewById(R.id.progress);
     }
 
     private void setListEmptyView() {
@@ -62,11 +64,14 @@ public class EarthquakeActivity extends AppCompatActivity
         EarthquakeListAdapter adapter = new EarthquakeListAdapter(this, earthquakes);
         earthquakeListView.setAdapter(adapter);
         earthquakeListView.setOnItemClickListener(adapter.getOnItemClickListener());
+        progressBar.setVisibility(View.GONE);
+
+        if (earthquakes.size() == 0) {
+            setListEmptyView();
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<Earthquake>> loader) {
-        earthquakeListView.setAdapter(new EarthquakeListAdapter(this, new ArrayList<Earthquake>()));
-    }
+    public void onLoaderReset(Loader<ArrayList<Earthquake>> loader) {}
 
 }
