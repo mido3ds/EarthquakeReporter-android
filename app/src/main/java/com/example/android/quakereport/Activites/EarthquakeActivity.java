@@ -48,9 +48,9 @@ public class EarthquakeActivity extends AppCompatActivity
         progressBar = (ProgressBar) findViewById(R.id.progress);
     }
 
-    private void setListEmptyView() {
+    private void setListEmptyView(String text) {
         TextView emptyView = (TextView) findViewById(R.id.empty_view);
-        emptyView.setText("No Earthquake Data Found");
+        emptyView.setText(text);
         earthquakeListView.setEmptyView(emptyView);
     }
 
@@ -67,7 +67,7 @@ public class EarthquakeActivity extends AppCompatActivity
         progressBar.setVisibility(View.GONE);
 
         if (earthquakes.size() == 0) {
-            setListEmptyView();
+            setListEmptyView(((EarthquakeLoader) loader).getFailureReason());
         }
     }
 
