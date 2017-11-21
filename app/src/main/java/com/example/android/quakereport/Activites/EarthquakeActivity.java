@@ -16,13 +16,17 @@
 package com.example.android.quakereport.Activites;
 
 import android.app.LoaderManager;
+import android.content.Intent;
 import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.example.android.quakereport.Earthquake;
 import com.example.android.quakereport.EarthquakeListAdapter;
 import com.example.android.quakereport.EarthquakeLoader;
@@ -37,6 +41,23 @@ public class EarthquakeActivity extends AppCompatActivity
 
     private ListView earthquakeListView;
     private ProgressBar progressBar;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, EarthquakeActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +93,7 @@ public class EarthquakeActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoaderReset(Loader<ArrayList<Earthquake>> loader) {}
+    public void onLoaderReset(Loader<ArrayList<Earthquake>> loader) {
+    }
 
 }

@@ -14,6 +14,18 @@ import android.widget.TextView;
 import java.util.List;
 
 public class EarthquakeListAdapter extends ArrayAdapter<Earthquake> {
+    private final ListView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Earthquake earthquake = getItem(position);
+            String url = earthquake.getUrl();
+
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+            browserIntent.setData(Uri.parse(url));
+            getContext().startActivity(browserIntent);
+        }
+    };
+
     public EarthquakeListAdapter(Context context, List<Earthquake> objects) {
         super(context, 0, objects);
     }
@@ -37,18 +49,6 @@ public class EarthquakeListAdapter extends ArrayAdapter<Earthquake> {
 
         return convertView;
     }
-
-    private final ListView.OnItemClickListener onItemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Earthquake earthquake = getItem(position);
-            String url = earthquake.getUrl();
-
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-            browserIntent.setData(Uri.parse(url));
-            getContext().startActivity(browserIntent);
-        }
-    };
 
     public ListView.OnItemClickListener getOnItemClickListener() {
         return onItemClickListener;

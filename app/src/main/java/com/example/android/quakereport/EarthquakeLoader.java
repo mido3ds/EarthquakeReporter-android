@@ -3,6 +3,7 @@ package com.example.android.quakereport;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.util.Log;
+
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,16 +29,6 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
     private String failureReason;
     private URL url = null;
 
-    public String getFailureReason() {
-        return failureReason;
-    }
-
-    @Override
-    protected void onStartLoading() {
-        super.onStartLoading();
-        forceLoad();
-    }
-
     public EarthquakeLoader(Context context, int limit) {
         super(context);
 
@@ -52,6 +43,26 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
 
     private static String streamToString(final BufferedInputStream inputStream) throws IOException {
         return IOUtils.toString(inputStream, "UTF-8");
+    }
+
+    private static String formatDate(Long epochSeconds) {
+        Date date = new Date(epochSeconds);
+        DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+        return dateFormat.format(date);
+    }
+
+    private static URL buildQuery(int limit) throws MalformedURLException {
+        return new URL(START_QUERY + "limit" + "=" + Integer.toString(limit));
+    }
+
+    public String getFailureReason() {
+        return failureReason;
+    }
+
+    @Override
+    protected void onStartLoading() {
+        super.onStartLoading();
+        forceLoad();
     }
 
     private ArrayList<Earthquake> parseJSON(final String json) {
@@ -78,16 +89,6 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
             failureReason = REASON_NO_DATA;
         }
         return earthquakes;
-    }
-
-    private static String formatDate(Long epochSeconds) {
-        Date date = new Date(epochSeconds);
-        DateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
-        return dateFormat.format(date);
-    }
-
-    private static URL buildQuery(int limit) throws MalformedURLException {
-        return new URL(START_QUERY + "limit" + "=" + Integer.toString(limit));
     }
 
     @Override
