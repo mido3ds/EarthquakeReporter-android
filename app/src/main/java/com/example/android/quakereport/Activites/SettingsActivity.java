@@ -2,6 +2,7 @@ package com.example.android.quakereport.Activites;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -27,6 +28,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             Preference minMagnitude = findPreference(getString(R.string.settings_min_magnitude_key));
             bindPreferenceSummaryToValue(minMagnitude);
+
+            Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
+            bindPreferenceSummaryToValue(orderBy);
         }
 
         private void bindPreferenceSummaryToValue(Preference preference) {
@@ -38,7 +42,19 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
-            preference.setSummary(value.toString());
+            String summary;
+
+            if (preference instanceof ListPreference) {
+                // summary should be the entry label not the value
+                ListPreference listPreference = (ListPreference) preference;
+
+                int index = listPreference.findIndexOfValue(value.toString());
+                summary = (String) listPreference.getEntries()[index];
+            } else {
+                summary = value.toString();
+            }
+
+            preference.setSummary(summary);
             return true;
         }
     }
