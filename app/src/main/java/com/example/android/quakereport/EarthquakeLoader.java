@@ -2,6 +2,7 @@ package com.example.android.quakereport;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import org.apache.commons.io.IOUtils;
@@ -22,18 +23,18 @@ import java.util.Date;
 
 public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
     private static final String USGS_WEBSITE = "earthquake.usgs.gov";
-    private static final String START_QUERY = "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&";
+    private static final String START_QUERY = "https://earthquake.usgs.gov/fdsnws/event/1/query";
     private static final String REASON_INTERNAL = "Internal Error Happened";
     private static final String REASON_NO_INT = "No Internet Connection";
     private static final String REASON_NO_DATA = "No Earthquake Data";
     private String failureReason;
     private URL url = null;
 
-    public EarthquakeLoader(Context context, int limit) {
+    public EarthquakeLoader(Context context, int limit, String minMagnitude) {
         super(context);
 
         try {
-            url = buildQuery(Math.abs(limit));
+            url = buildQuery(Math.abs(limit), minMagnitude);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             Log.e(EarthquakeLoader.class.getName(), "error in query constructing ");
@@ -51,8 +52,16 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
         return dateFormat.format(date);
     }
 
-    private static URL buildQuery(int limit) throws MalformedURLException {
-        return new URL(START_QUERY + "limit" + "=" + Integer.toString(limit));
+    private static URL buildQuery(int limit, String minMagnitude) throws MalformedURLException {
+        Uri baseUri = Uri.parse(START_QUERY);
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        uriBuilder.appendQueryParameter("format", "geojson");
+        uriBuilder.appendQueryParameter("limit", Integer.toString(limit));
+        uriBuilder.appendQueryParameter("minmag", minMagnitude);
+        uriBuilder.appendQueryParameter("orderby", "time");
+
+        return new URL(uriBuilder.toString());
     }
 
     public String getFailureReason() {
@@ -86,8 +95,12 @@ public class EarthquakeLoader extends AsyncTaskLoader<ArrayList<Earthquake>> {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e(EarthquakeLoader.class.getName(), "couldn't parse");
+            failureReason = REASON_INTERNAL;
+        }
+        if (earthquakes.size() == 0) {
             failureReason = REASON_NO_DATA;
         }
+
         return earthquakes;
     }
 

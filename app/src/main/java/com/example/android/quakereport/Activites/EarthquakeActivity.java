@@ -18,7 +18,9 @@ package com.example.android.quakereport.Activites;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +38,7 @@ import java.util.ArrayList;
 
 public class EarthquakeActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<ArrayList<Earthquake>> {
-    private final int ITEMS_LIMIT = 30;
+    private final int ITEMS_LIMIT = 10;
     private final int LOADER_ID = 1;
 
     private ListView earthquakeListView;
@@ -52,7 +54,7 @@ public class EarthquakeActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(this, EarthquakeActivity.class);
+            Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
             return true;
         }
@@ -77,7 +79,12 @@ public class EarthquakeActivity extends AppCompatActivity
 
     @Override
     public Loader<ArrayList<Earthquake>> onCreateLoader(int id, Bundle args) {
-        return new EarthquakeLoader(this, ITEMS_LIMIT);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String minMagnitude = sharedPrefs.getString(
+                getString(R.string.settings_min_magnitude_key),
+                getString(R.string.settings_min_magnitude_default));
+
+        return new EarthquakeLoader(this, ITEMS_LIMIT, minMagnitude);
     }
 
     @Override
